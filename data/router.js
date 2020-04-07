@@ -15,4 +15,18 @@ const router = express.Router();
 
 //handle every request begining with /api/posts
 
+router.get("/", (req, res)=> {
+    dB.find()
+    .then((array) => {
+        res.status(200).json(array)
+    }
+    )
+    .catch((error) => {
+        console.log(error)
+        res.status(500).json({error: "The posts information could not be retrieved."})
+    }
+    
+    )
+})
+
 module.exports = router;
