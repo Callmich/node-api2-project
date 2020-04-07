@@ -3,7 +3,7 @@
 // Post /api/posts/:id/comments,
 // SOLVED!!!! Get /api/posts,
 // SOLVED!!!! Get /api/posts/:id,
-// Get /api/posts/:id/comments,
+// SOLVED!!!! Get /api/posts/:id/comments,
 // DELETE /api/posts/:id,
 // Put /api/posts/:id
 
@@ -59,6 +59,17 @@ router.get("/:id/comments", (req, res) => {
         error: "The comments information could not be retrieved."
      })
  })
+})
+
+router.post("/", (req, res) =>{
+    dB.insert(req.body)
+    .then((newPost)=>{
+        res.status(201).json(newPost)
+    })
+    .catch((errorz)=>{
+        console.log("server error in post", errorz)
+        res.status(500).json({error: "There was an error while saving the post to the database" })
+    })
 })
 
 module.exports = router;
