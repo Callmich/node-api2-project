@@ -1,5 +1,5 @@
 // Needed 
-// Post /api/posts, 
+// SOLVED!!!! Post /api/posts, 
 // Post /api/posts/:id/comments,
 // SOLVED!!!! Get /api/posts,
 // SOLVED!!!! Get /api/posts/:id,
@@ -65,7 +65,12 @@ router.post("/", (req, res) =>{
     if(req.body.title && req.body.contents){
     dB.insert(req.body)
     .then((newPost)=>{
-        res.status(201).json(newPost)
+        if(newPost){
+            dB.findById(newPost.id)
+            .then((NPost)=>{
+                res.status(201).json(NPost)
+            })
+        }
     })
     .catch((errorz)=>{
         console.log("server error in post", errorz)
