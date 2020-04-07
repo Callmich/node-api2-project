@@ -86,8 +86,12 @@ router.post("/:id/comments", (req, res) =>{
         if(req.params.id == req.body.post_id){
             dB.insertComment(req.body)
             .then((com) =>{
-                console.log("here is the comment info currently",com)
-                res.status(201).json(com)
+                if(com){
+                    dB.findCommentById(com.id)
+                    .then((NCom)=>{
+                        res.status(201).json(NCom)
+                    })
+                }
             })
             .catch((errz) =>{
                 console.log("server error durring comment post",errz)
