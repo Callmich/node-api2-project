@@ -136,27 +136,41 @@ router.put("/:id", (req, res) => {
     const postToUpdate = ()=>{
         dB.findById(id)
         .then(uPost=>{
-            if(uPost.length=0){
+            if(uPost.length==0){
                 res.status(404).json({ message: "The post with the specified ID does not exist."})
+            }else{
+                dB.update(id, changes)
+                .then((p)=>{
+                    if (p){
+                      dB.findById(id)
+                      .then((updatedPost) =>{
+                          res.status(200).json(updatedPost)
+                      })
+                    }
+                })
+                .catch((e)=>{
+                    console.log("error serever durring put", e)
+                    res.status(500).json({error: "The post information could not be modified."})
+                })
             }
         })
     }
     if(changes.title && changes.contents){
 
         postToUpdate();
-        dB.update(id, changes)
-        .then((p)=>{
-            if (p){
-              dB.findById(id)
-              .then((updatedPost) =>{
-                  res.status(200).json(updatedPost)
-              })
-            }
-        })
-        .catch((e)=>{
-            console.log("error serever durring put", e)
-            res.status(500).json({error: "The post information could not be modified."})
-        })
+        // dB.update(id, changes)
+        // .then((p)=>{
+        //     if (p){
+        //       dB.findById(id)
+        //       .then((updatedPost) =>{
+        //           res.status(200).json(updatedPost)
+        //       })
+        //     }
+        // })
+        // .catch((e)=>{
+        //     console.log("error serever durring put", e)
+        //     res.status(500).json({error: "The post information could not be modified."})
+        // })
     }else{
         res.status(400).json({errorMessage: "Please provide title and contents for the post."})
     }
