@@ -110,11 +110,14 @@ router.delete("/:id", (req, res) =>{
     const postToDelete = ()=>{
             dB.findById(id)
             .then((pst)=>{
+                if(pst.length>=1){
                 res.status(200).json(pst)
+                }else{
+                    res.status(404).json({message: "The post with the specified ID does not exist."})
+                }
             })
         }
 
-    if(id){
         postToDelete();
         dB.remove(id)
         .then((delPost)=>{
@@ -124,9 +127,6 @@ router.delete("/:id", (req, res) =>{
         .catch((error)=>{
             res.status(500).json({ error: "The post could not be removed"})
         })
-    }else{
-        res.status(404).json({message: "The post with the specified ID does not exist."})
-    }
 
 
 })
