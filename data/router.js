@@ -1,6 +1,6 @@
 // Needed 
 // SOLVED!!!! Post /api/posts, 
-// Post /api/posts/:id/comments,
+// SOLVED!!!! Post /api/posts/:id/comments,
 // SOLVED!!!! Get /api/posts,
 // SOLVED!!!! Get /api/posts/:id,
 // SOLVED!!!! Get /api/posts/:id/comments,
@@ -103,6 +103,32 @@ router.post("/:id/comments", (req, res) =>{
     }else{
         res.status(400).json({errorMessage: "Please provide text for the comment."})
     }
+})
+
+router.delete("/:id", (req, res) =>{
+    const id = req.params.id
+    const postToDelete = ()=>{
+            dB.findById(id)
+            .then((pst)=>{
+                res.status(200).json(pst)
+            })
+        }
+
+    if(id){
+        postToDelete();
+        dB.remove(id)
+        .then((delPost)=>{
+            console.log("DeletedPost",delPost)
+            res.status(200).json(postToDelete)
+        })
+        .catch((error)=>{
+            res.status(500).json({ error: "The post could not be removed"})
+        })
+    }else{
+        res.status(404).json({message: "The post with the specified ID does not exist."})
+    }
+
+
 })
 
 module.exports = router;
